@@ -16,17 +16,17 @@ pub trait ReadDoc {
     ) -> Result<Option<(Value<'_>, ObjId)>, AutomergeError>;
 
     fn object_type<O: AsRef<ObjId>>(&self, obj: O) -> Option<am::ObjType>;
-    fn map_range<O: AsRef<ObjId>, R: RangeBounds<String>>(
-        &self,
+    fn map_range<'a, O: AsRef<ObjId>, R: RangeBounds<String> + 'a>(
+        &'a self,
         obj: O,
         range: R,
-    ) -> am::MapRange<'_, R>;
+    ) -> am::iter::MapRange<'_, R>;
 
     fn list_range<O: AsRef<ObjId>, R: RangeBounds<usize>>(
         &self,
         obj: O,
         range: R,
-    ) -> am::ListRange<'_, R>;
+    ) -> am::iter::ListRange<'_, R>;
 
     fn length<O: AsRef<ObjId>>(&self, obj: O) -> usize;
 
@@ -105,11 +105,11 @@ impl ReadDoc for am::AutoCommit {
             .unwrap_or(None)
     }
 
-    fn map_range<O: AsRef<ObjId>, R: RangeBounds<String>>(
-        &self,
+    fn map_range<'a, O: AsRef<ObjId>, R: RangeBounds<String> + 'a>(
+        &'a self,
         obj: O,
         range: R,
-    ) -> am::MapRange<'_, R> {
+    ) -> am::iter::MapRange<'_, R> {
         am::ReadDoc::map_range(self, obj, range)
     }
 
@@ -117,7 +117,7 @@ impl ReadDoc for am::AutoCommit {
         &self,
         obj: O,
         range: R,
-    ) -> am::ListRange<'_, R> {
+    ) -> am::iter::ListRange<'_, R> {
         am::ReadDoc::list_range(self, obj, range)
     }
 
@@ -154,11 +154,11 @@ impl<'a, Obs: am::transaction::Observation> ReadDoc for am::transaction::Transac
             .unwrap_or(None)
     }
 
-    fn map_range<O: AsRef<ObjId>, R: RangeBounds<String>>(
-        &self,
+    fn map_range<'b, O: AsRef<ObjId>, R: RangeBounds<String> + 'b>(
+        &'b self,
         obj: O,
         range: R,
-    ) -> am::MapRange<'_, R> {
+    ) -> am::iter::MapRange<'_, R> {
         am::ReadDoc::map_range(self, obj, range)
     }
 
@@ -166,7 +166,7 @@ impl<'a, Obs: am::transaction::Observation> ReadDoc for am::transaction::Transac
         &self,
         obj: O,
         range: R,
-    ) -> am::ListRange<'_, R> {
+    ) -> am::iter::ListRange<'_, R> {
         am::ReadDoc::list_range(self, obj, range)
     }
 
@@ -203,11 +203,11 @@ impl ReadDoc for am::Automerge {
             .unwrap_or(None)
     }
 
-    fn map_range<O: AsRef<ObjId>, R: RangeBounds<String>>(
-        &self,
+    fn map_range<'a, O: AsRef<ObjId>, R: RangeBounds<String> + 'a>(
+        &'a self,
         obj: O,
         range: R,
-    ) -> am::MapRange<'_, R> {
+    ) -> am::iter::MapRange<'_, R> {
         am::ReadDoc::map_range(self, obj, range)
     }
 
@@ -215,7 +215,7 @@ impl ReadDoc for am::Automerge {
         &self,
         obj: O,
         range: R,
-    ) -> am::ListRange<'_, R> {
+    ) -> am::iter::ListRange<'_, R> {
         am::ReadDoc::list_range(self, obj, range)
     }
 

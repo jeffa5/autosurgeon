@@ -4,3 +4,6 @@ members = [
     "autosurgeon",
     "autosurgeon-derive",
 ]
+
+[patch.crates-io]
+automerge = { git = "https://github.com/jeffa5/automerge", branch = "cmp-heads" }

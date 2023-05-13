@@ -748,7 +748,7 @@ impl<'a, D: Doc> MapReconciler for InMap<'a, D> {
 }
 
 struct InMapEntries<'a> {
-    map_range: automerge::MapRange<'a, RangeFull>,
+    map_range: automerge::iter::MapRange<'a, RangeFull>,
 }
 
 impl<'a> Iterator for InMapEntries<'a> {
@@ -766,7 +766,7 @@ struct InSeq<'a, D> {
 }
 
 struct ItemsInSeq<'a> {
-    list_range: automerge::ListRange<'a, RangeFull>,
+    list_range: automerge::iter::ListRange<'a, RangeFull>,
 }
 
 impl<'a> Iterator for ItemsInSeq<'a> {
